@@ -37,10 +37,29 @@ public class CrudBaseController {
 
     @GetMapping("/home/removePerson")
     @ResponseBody
-    public String addPerson(@RequestParam int id) {
+    public String deletePerson(@RequestParam int id) {
         String res;
         if (list.removeIf(p -> p.getId() == id)) res = id + "번 사람이 삭제되었습니다.";
         else res = id + "번 사람이 존재하지 않습니다.";
+        return res;
+    }
+
+    @GetMapping("/home/updatePerson")
+    @ResponseBody
+    public String updatePerson(@RequestParam int id, String name, int age) {
+        String res = "";
+        Person fnd = list.stream().filter(p -> p.getId() == id).findFirst().map(p -> {
+                    p.setName(name);
+                    p.setAge(age);
+                    return p;
+                }).
+                orElse(null);
+        if (fnd == null) {
+            res = id + "번 사람이 존재하지 않습니다.";
+        } else {
+            res = id + "번 사람이 수정되었습니다.";
+        }
+
         return res;
     }
 
