@@ -1,6 +1,7 @@
 package com.ll.sbb.member.controller;
 
 import com.ll.sbb.member.service.MemberService;
+import com.ll.sbb.rq.model.Rq;
 import com.ll.sbb.rspData.model.RspData;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,30 +35,23 @@ public class MemberController {
     @ResponseBody
     public RspData login(HttpServletResponse rsp, @RequestParam String username, String password) {
         RspData ret = memberService.loginValid(username, password);
-        if (ret.getResultCode().startsWith("S")) rsp.addCookie(new Cookie("username", username));
+        if (ret.isSuccess()) rsp.addCookie(new Cookie("username", username));
         return ret;
     }
 
     @GetMapping("member/me")
     @ResponseBody
-    public RspData me(HttpServletRequest req) {
-        if (req.getCookies() == null) return memberService.me(null);
-        return memberService.me(Arrays.stream(req.getCookies())
-                .filter(c -> c.getName().equals("username"))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null));
+    public RspData me(HttpServletRequest req, HttpServletResponse rsp) {
+        Rq rq = new Rq(req, rsp);
+        String username = rq.getCookie("username", "없음");
+        return memberService.me(username);
     }
 
     @GetMapping("member/logout")
     @ResponseBody
     public RspData logout(HttpServletRequest req, HttpServletResponse rsp) {
-        if (req.getCookies() != null) Arrays.stream(req.getCookies())
-                .filter(c -> c.getName().equals("username"))
-                .forEach(c -> {
-                    c.setMaxAge(0);
-                    rsp.addCookie(c);
-                });
+        Rq rq = new Rq(req, rsp);
+        rq.removeCookie("username");
         return RspData.builder().resultCode("S-1").msg("로그아웃되었습니다.").build();
     }
 }
