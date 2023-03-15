@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 public class MemberList {
     private long idGen;
-    private List<Member> list;
+    private final List<Member> list;
 
     public MemberList() {
         list = new ArrayList<>();
