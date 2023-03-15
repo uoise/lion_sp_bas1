@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Arrays;
-
-
 @Controller
 public class MemberController {
 
@@ -33,9 +30,10 @@ public class MemberController {
 
     @GetMapping("member/login")
     @ResponseBody
-    public RspData login(HttpServletResponse rsp, @RequestParam String username, String password) {
+    public RspData login(HttpServletRequest req, HttpServletResponse rsp, @RequestParam String username, String password) {
+        Rq rq = new Rq(req, rsp);
         RspData ret = memberService.loginValid(username, password);
-        if (ret.isSuccess()) rsp.addCookie(new Cookie("username", username));
+        if (ret.isSuccess()) rq.setCookie("username", username);
         return ret;
     }
 

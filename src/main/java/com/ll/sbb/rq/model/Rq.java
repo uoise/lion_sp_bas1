@@ -24,12 +24,16 @@ public class Rq {
 
     public long getCookieAsLong(String name, long defaultValue) {
         if (req.getCookies() == null) return defaultValue;
-        return Arrays.stream(req.getCookies())
-                .filter(c -> c.getName().equals(name))
-                .map(Cookie::getValue)
-                .mapToLong(Long::parseLong)
-                .findFirst()
-                .orElse(defaultValue);
+        try {
+            return Arrays.stream(req.getCookies())
+                    .filter(c -> c.getName().equals(name))
+                    .map(Cookie::getValue)
+                    .mapToLong(Long::parseLong)
+                    .findFirst()
+                    .orElse(defaultValue);
+        } catch (Exception e) {
+            throw new RuntimeException(name + " Long::parseLong exception");
+        }
     }
 
     public <T> void setCookie(String name, T data) {
