@@ -1,15 +1,15 @@
 package com.ll.sbb.controller;
 
 import com.ll.sbb.model.Person;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Controller
@@ -69,4 +69,23 @@ public class CrudBaseController {
         return list;
     }
 
+
+    @GetMapping("/cookies")
+    @ResponseBody
+    public int gsCookie(HttpServletRequest req, HttpServletResponse rsp) {
+        int cookieCount;
+        if (req.getCookies() != null) {
+            cookieCount = Arrays.stream(req.getCookies())
+                    .filter(c -> c.getName().equals("count"))
+                    .map(Cookie::getValue)
+                    .mapToInt(Integer::parseInt)
+                    .findFirst().orElse(0);
+        } else {
+            cookieCount = 0;
+        }
+        ++cookieCount;
+        rsp.addCookie(new Cookie("count", String.valueOf(cookieCount)));
+        System.out.println(cookieCount);
+        return cookieCount;
+    }
 }
