@@ -3,17 +3,15 @@ package com.ll.sbb.member.service;
 import com.ll.sbb.member.model.Member;
 import com.ll.sbb.member.repository.MemberList;
 import com.ll.sbb.rspData.model.RspData;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@AllArgsConstructor
 public class MemberService {
 
     private final MemberList memberList;
-
-    public MemberService() {
-        this.memberList = new MemberList();
-    }
 
     public RspData loginValid(String username, String password) {
         RspData ret;
@@ -38,7 +36,8 @@ public class MemberService {
         return ret;
     }
 
-    public RspData register(String name, int age) {
-        return null;
+    public RspData register(String name, String password) {
+        return RspData.builder().resultCode("S-1").msg(memberList.add(name, password) + "가 생성되었습니다.").build();
     }
 }
+

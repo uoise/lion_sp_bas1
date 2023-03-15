@@ -31,6 +31,11 @@ public class MemberList {
         return list.removeIf(m -> m.getId() == id);
     }
 
+    public long add(String username, String password) {
+        Member member = Member.builder().id(++idGen).username(username).password(password).build();
+        return this.add(member);
+    }
+
     public long add(Member member) {
         list.add(member);
         return member.getId();
