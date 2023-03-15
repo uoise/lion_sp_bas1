@@ -15,29 +15,28 @@ public class MemberService {
 
     public RspData loginValid(String username, String password) {
         RspData ret;
-
         Member fnd = memberList.getByUsername(username);
         if (fnd == null) {
-            ret = RspData.builder()
-                    .resultCode("F-2")
-                    .msg(username + "(은)는 존재하지 않는 회원입니다.").build();
+            ret = RspData.of("F-2", username + "(은)는 존재하지 않는 회원입니다.");
         } else {
             if (fnd.getPassword().equals(password)) {
-                ret = RspData.builder()
-                        .resultCode("S-1")
-                        .msg(username + " 님 환영합니다.").build();
+                ret = RspData.of("S-1", username + " 님 환영합니다.");
             } else {
-                ret = RspData.builder()
-                        .resultCode("F-1")
-                        .msg("비밀번호가 일치하지 않습니다.").build();
+                ret = RspData.of("F-1", "비밀번호가 일치하지 않습니다.");
             }
         }
-
         return ret;
     }
 
     public RspData register(String name, String password) {
-        return RspData.builder().resultCode("S-1").msg(memberList.add(name, password) + "가 생성되었습니다.").build();
+        long id = memberList.add(name, password);
+        return RspData.of("S-1", id + "번 계정 생성에 성공했습니다.", id);
+    }
+
+    public RspData me(String username) {
+        Member fnd = memberList.getByUsername(username);
+        if (fnd == null) return RspData.of("F-1", "로그인 후 이용해주세요.");
+        return RspData.of("S-1", username + " 님 환영합니다");
     }
 }
 
