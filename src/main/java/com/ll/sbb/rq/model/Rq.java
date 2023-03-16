@@ -40,12 +40,14 @@ public class Rq {
         rsp.addCookie(new Cookie(name, data.toString()));
     }
 
-    public void removeCookie(String name) {
-        if (req.getCookies() != null) Arrays.stream(req.getCookies())
+    public boolean removeCookie(String name) {
+        Cookie cookie = Arrays.stream(req.getCookies())
                 .filter(c -> c.getName().equals(name))
-                .forEach(c -> {
-                    c.setMaxAge(0);
-                    rsp.addCookie(c);
-                });
+                .findFirst()
+                .orElse(null);
+        if (cookie == null) return false;
+        cookie.setMaxAge(0);
+        rsp.addCookie(cookie);
+        return true;
     }
 }
