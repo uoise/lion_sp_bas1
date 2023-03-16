@@ -36,7 +36,7 @@ public class MemberService {
     public RspData me(long userId) {
         Member fnd = memberList.getByID(userId);
         if (fnd == null) return RspData.of("F-1", "로그인 후 이용해주세요.");
-        return RspData.of("S-1", fnd.getUsername() + " 님 환영합니다");
+        return RspData.of("S-1", fnd.getUsername() + " 님 환영합니다", fnd);
     }
 }
 

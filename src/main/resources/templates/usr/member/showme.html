@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>me</title>
+</head>
+<body>
+
+<h1>ME</h1>
+<div th:if="${me != null}">
+    <h2>userId : [[${me.id}]]</h2>
+    <h2>username : [[${me.username}]]</h2>
+</div>
+<div th:if="${me == null}">
+    <h2>로그인 후 접속해주세요</h2>
+</div>
+
+
+</body>
+</html>

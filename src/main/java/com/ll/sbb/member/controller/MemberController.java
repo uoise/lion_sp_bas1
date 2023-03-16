@@ -1,10 +1,13 @@
 package com.ll.sbb.member.controller;
 
+import com.ll.sbb.member.model.Member;
 import com.ll.sbb.member.service.MemberService;
 import com.ll.sbb.rq.model.Rq;
 import com.ll.sbb.rspData.model.RspData;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,35 +31,26 @@ public class MemberController {
         return memberService.register(name, age);
     }
 
-    @GetMapping("member/loginForm")
-    @ResponseBody
+    @GetMapping("member/login")
     public String loginForm() {
-        if (rq.isLogined()) return """
-                <h1>이미 로그인 되었습니다.</h1>
-                """.stripIndent();
-        return """
-                <h1>login</h1>
-                <form method="get" action="/member/login">
-                  <input type="text"      name="username" placeholder="username">
-                    <input type="text"      name="password" placeholder="password">
-                  <button type="submit">로그인</button>
-                  </form>
-                """.stripIndent();
+//        if (rq.isLogined()) return "usr/member/logined";
+        return "usr/member/login";
     }
 
-    @GetMapping("member/login")
+    @PostMapping("member/login")
     @ResponseBody
-    public RspData login(@RequestParam String username, String password) {
+    public RspData login(String username, String password) {
         RspData ret = memberService.loginValid(username, password);
         if (ret.isSuccess()) rq.setSession("userId", (long) ret.getData());
         return RspData.of(ret.getResultCode(), ret.getMsg());
     }
 
     @GetMapping("member/me")
-    @ResponseBody
-    public RspData me() {
+    public String me(Model model) {
         long userid = rq.getSession("userId", -1L);
-        return memberService.me(userid);
+        Member me = (Member) memberService.me(userid).getData();
+        model.addAttribute("me", me);
+        return "usr/member/showme";
     }
 
     @GetMapping("member/logout")

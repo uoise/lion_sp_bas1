@@ -1,9 +1,8 @@
 package com.ll.sbb.member.model;
 
 import lombok.Builder;
-import lombok.Getter;
-
-@Getter
+import lombok.Data;
+@Data
 @Builder
 public class Member {
     private final long id;
