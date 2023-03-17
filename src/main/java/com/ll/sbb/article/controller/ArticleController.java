@@ -25,8 +25,6 @@ public class ArticleController {
         Article article = Article.builder()
                 .title(title)
                 .body(body)
-                .createDate(LocalDateTime.now())
-                .modifyDate(LocalDateTime.now())
                 .build();
         long articleId = articleService.create(article);
         return RspData.of("S-1", articleId + "번 글이 생성되었습니다");
