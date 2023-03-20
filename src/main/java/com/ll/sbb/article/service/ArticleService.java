@@ -22,4 +22,9 @@ public class ArticleService {
         if (fnd == null) return create(article);
         return articleRepository.save(fnd).getId();
     }
+
+    @Transactional
+    public Article findByTitle(String title) {
+        return articleRepository.findArticleByTitle(title).orElse(null);
+    }
 }

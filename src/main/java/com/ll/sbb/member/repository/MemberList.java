@@ -3,14 +3,12 @@ package com.ll.sbb.member.repository;
 
 import com.ll.sbb.member.model.Member;
 import lombok.Getter;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Getter
-@Component
 public class MemberList {
     private long idGen;
     private final List<Member> list;

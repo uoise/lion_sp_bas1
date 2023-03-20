@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDateTime;
-
 @Controller
 @RequestMapping("/article")
 @RequiredArgsConstructor
@@ -28,5 +26,11 @@ public class ArticleController {
                 .build();
         long articleId = articleService.create(article);
         return RspData.of("S-1", articleId + "번 글이 생성되었습니다");
+    }
+
+    @GetMapping("/find")
+    @ResponseBody
+    public Article find(@RequestParam String title) {
+        return articleService.findByTitle(title);
     }
 }
